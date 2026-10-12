@@ -25,7 +25,7 @@ The rule behind it: no gate reached, no half-resting on your phone.
 2. Your rest appears blurred and locked next to your work.
 3. When the finish line is reached, tap the button and the rest unlocks.
 4. After resting, write a line or two of reflection (optional).
-5. The last five earned rests are kept in a small log.
+5. Every earned rest is saved to a history (date, work, rest and reflection). Open it with "View history" to read it, delete single entries, download it as a `.txt` file or clear it.
 
 There are no accounts and no backend. Everything is stored in your browser's `localStorage`, so nothing leaves your device.
 
