@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Earn Your Rest</title>
+  <meta name="description" content="Earn it. Name it. Then rest. A one-screen habit tool.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>Earn it. Name it. Then rest.</h1>
+      <p class="sub">Name the work, name the rest, finish the work, then actually rest.</p>
+    </header>
+
+    <!-- Step 1: set up the pair -->
+    <section id="setup" class="panel">
+      <label class="field">
+        <span class="label">Finish</span>
+        <input id="work" type="text" maxlength="80" autocomplete="off"
+               placeholder="three Calculus problems">
+      </label>
+      <label class="field">
+        <span class="label">Then</span>
+        <input id="rest" type="text" maxlength="80" autocomplete="off"
+               placeholder="an episode of The Mentalist">
+      </label>
+      <p class="hint">Make the finish line checkable: "the draft exists", not "good enough".</p>
+      <button id="lock" class="btn primary" type="button">Lock it in</button>
+    </section>
+
+    <!-- Step 2: the gate -->
+    <section id="gate" class="panel" hidden>
+      <div class="pair">
+        <div class="pair-item">
+          <span class="tag">Work</span>
+          <strong id="gate-work"></strong>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="pair-item locked" id="reward-box">
+          <span class="tag">Rest</span>
+          <strong id="gate-rest"></strong>
+          <span class="lock" id="lock-icon" aria-hidden="true">🔒</span>
+        </div>
+      </div>
+
+      <p id="gate-msg" class="msg">
+        No gate reached, no half-resting on your phone.
+      </p>
+
+      <button id="done" class="btn primary" type="button">The finish line is reached</button>
+      <button id="reset" class="btn link" type="button">Start over</button>
+    </section>
+
+    <!-- Step 3: the rest -->
+    <section id="rest-panel" class="panel" hidden>
+      <div class="unlocked">
+        <span class="big">🔓</span>
+        <h2>Earned. Go rest.</h2>
+        <p>Now: <strong id="rest-name"></strong></p>
+        <p class="hint">Rest fully. When it ends, come back and reflect.</p>
+      </div>
+      <button id="rest-over" class="btn primary" type="button">I'm done resting</button>
+    </section>
+
+    <!-- Step 4: reflect -->
+    <section id="reflect" class="panel" hidden>
+      <h2>Reflect</h2>
+      <label class="field stack">
+        <span class="label">What moved me, what I'm keeping?</span>
+        <textarea id="note" rows="3" maxlength="240"
+                  placeholder="One or two lines is enough."></textarea>
+      </label>
+      <button id="save" class="btn primary" type="button">Save and finish</button>
+      <button id="skip" class="btn link" type="button">Skip</button>
+    </section>
+
+    <footer>
+      <p id="count" class="count"></p>
+      <ul id="log" class="log"></ul>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
