@@ -111,12 +111,58 @@ input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 
 .unlocked .big { font-size: 2.2rem; }
 .unlocked p { margin: 4px 0; }
 
-footer { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 12px; }
+footer {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 .count { margin: 0; color: var(--muted); font-size: 0.85rem; }
-.log { list-style: none; margin: 8px 0 0; padding: 0; font-size: 0.85rem; color: var(--muted); }
-.log li { padding: 6px 0; border-bottom: 1px dashed var(--line); }
-.log li:last-child { border-bottom: 0; }
-.log b { color: var(--ink); font-weight: 600; }
+
+.btn.small { width: auto; margin-top: 0; padding: 6px 10px; font-size: 0.85rem; }
+.btn.outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font-weight: 500;
+}
+.btn.outline:hover { border-color: var(--accent); }
+.btn.outline.danger:hover { border-color: #c0504d; color: #c0504d; }
+
+.history-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.history-head h2 { margin: 0; }
+.history-list { list-style: none; margin: 0 0 16px; padding: 0; max-height: 52vh; overflow-y: auto; }
+.history-list li {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+.h-date { font-size: 0.75rem; color: var(--muted); }
+.h-pair { margin: 4px 0; }
+.h-pair b { font-weight: 600; }
+.h-pair .h-arrow { color: var(--muted); }
+.h-note { margin: 6px 0 0; padding-left: 10px; border-left: 3px solid var(--accent); font-size: 0.92rem; }
+.h-note.none { border-left-color: var(--line); color: var(--muted); font-style: italic; }
+.h-del {
+  margin-top: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.h-del:hover { color: #c0504d; }
+.history-actions { display: flex; gap: 10px; }
+.history-actions .btn { flex: 1; }
+.history-actions[hidden] { display: none; }
 
 @media (max-width: 440px) {
   .pair { flex-direction: column; }

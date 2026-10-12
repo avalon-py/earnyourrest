@@ -76,9 +76,23 @@
       <button id="skip" class="btn link" type="button">Skip</button>
     </section>
 
+    <!-- History -->
+    <section id="history" class="panel" hidden>
+      <div class="history-head">
+        <h2>History</h2>
+        <button id="history-back" class="btn link small" type="button">← Back</button>
+      </div>
+      <p id="history-summary" class="hint"></p>
+      <ul id="history-list" class="history-list"></ul>
+      <div class="history-actions" id="history-actions">
+        <button id="export" class="btn outline" type="button">Download as .txt</button>
+        <button id="clear" class="btn outline danger" type="button">Clear all</button>
+      </div>
+    </section>
+
     <footer>
       <p id="count" class="count"></p>
-      <ul id="log" class="log"></ul>
+      <button id="history-open" class="btn link small" type="button">View history</button>
     </footer>
   </main>
 

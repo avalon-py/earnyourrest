@@ -8,7 +8,8 @@
     setup: $("setup"),
     gate: $("gate"),
     rest: $("rest-panel"),
-    reflect: $("reflect")
+    reflect: $("reflect"),
+    history: $("history")
   };
 
   // state: { step, work, rest, log: [{work, rest, note, ts}] }
@@ -44,31 +45,117 @@
       $("lock-icon").hidden = false;
     }
     save();
-    renderLog();
+    renderCount();
   }
 
-  function renderLog() {
+  function renderCount() {
     var n = state.log.length;
     $("count").textContent = n === 0
       ? "No earned rests yet."
       : n + (n === 1 ? " rest earned so far." : " rests earned so far.");
-
-    var ul = $("log");
-    ul.innerHTML = "";
-    state.log.slice(-5).reverse().forEach(function (e) {
-      var li = document.createElement("li");
-      var b = document.createElement("b");
-      b.textContent = e.work;
-      li.appendChild(b);
-      li.appendChild(document.createTextNode(" → " + e.rest));
-      if (e.note) {
-        var br = document.createElement("br");
-        li.appendChild(br);
-        li.appendChild(document.createTextNode("“" + e.note + "”"));
-      }
-      ul.appendChild(li);
-    });
   }
+
+  function fmtDate(ts) {
+    try {
+      return new Date(ts).toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    } catch (e) {
+      return new Date(ts).toString();
+    }
+  }
+
+  function openHistory() {
+    Object.keys(panels).forEach(function (k) { panels[k].hidden = (k !== "history"); });
+    renderHistory();
+  }
+
+  function renderHistory() {
+    var n = state.log.length;
+    var withNotes = state.log.filter(function (e) { return e.note; }).length;
+    $("history-summary").textContent = n === 0
+      ? "Nothing here yet. Finish a cycle and it will show up."
+      : n + (n === 1 ? " earned rest" : " earned rests") + ", " + withNotes +
+        (withNotes === 1 ? " reflection" : " reflections") + ". Newest first.";
+    $("history-actions").hidden = (n === 0);
+
+    var ul = $("history-list");
+    ul.innerHTML = "";
+    for (var i = n - 1; i >= 0; i--) {
+      ul.appendChild(historyItem(state.log[i], i));
+    }
+  }
+
+  function historyItem(e, index) {
+    var li = document.createElement("li");
+
+    var d = document.createElement("div");
+    d.className = "h-date";
+    d.textContent = e.ts ? fmtDate(e.ts) : "";
+    li.appendChild(d);
+
+    var p = document.createElement("div");
+    p.className = "h-pair";
+    var b = document.createElement("b");
+    b.textContent = e.work;
+    var arrow = document.createElement("span");
+    arrow.className = "h-arrow";
+    arrow.textContent = " → ";
+    p.appendChild(b);
+    p.appendChild(arrow);
+    p.appendChild(document.createTextNode(e.rest));
+    li.appendChild(p);
+
+    var note = document.createElement("p");
+    note.className = "h-note" + (e.note ? "" : " none");
+    note.textContent = e.note ? e.note : "No reflection";
+    li.appendChild(note);
+
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "h-del";
+    del.textContent = "Delete";
+    del.addEventListener("click", function () {
+      if (!window.confirm("Delete this entry?")) return;
+      state.log.splice(index, 1);
+      save();
+      renderCount();
+      renderHistory();
+    });
+    li.appendChild(del);
+
+    return li;
+  }
+
+  function exportText() {
+    var lines = ["Earn Your Rest: history", ""];
+    for (var i = state.log.length - 1; i >= 0; i--) {
+      var e = state.log[i];
+      lines.push(fmtDate(e.ts));
+      lines.push("Finished: " + e.work);
+      lines.push("Rested: " + e.rest);
+      lines.push("Reflection: " + (e.note || "(none)"));
+      lines.push("");
+    }
+    var blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "earn-your-rest-history.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  $("history-open").addEventListener("click", openHistory);
+  $("history-back").addEventListener("click", function () { show(state.step); });
+  $("export").addEventListener("click", exportText);
+  $("clear").addEventListener("click", function () {
+    if (!window.confirm("Delete your whole history? This can't be undone.")) return;
+    state.log = [];
+    save();
+    renderCount();
+    renderHistory();
+  });
 
   function reset() {
     state.work = "";
